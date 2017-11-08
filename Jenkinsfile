@@ -8,10 +8,11 @@ pipeline {
 	tools { 
 		maven 'apache-maven-3.5.0' 
 		}
+	/*
 	parameters{
 		choice(choices: ['DEV', 'PROD'], description: '', name: 'ENVIRONMENT')
 	}
-
+	*/
 	environment {
 				
 				PROJECT_URL="https://github.com/corjasgarcia/spring-petclinic"
