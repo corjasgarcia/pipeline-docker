@@ -16,7 +16,7 @@ pipeline {
 	environment {
 				
 				PROJECT_URL="https://github.com/corjasgarcia/spring-petclinic.git"
-				TEST_URL="https://github.com/corjasgarcia/adop-cartridge-java-regression-tests.git"
+				TEST_URL= "https://github.com/corjasgarcia/adop-cartridge-java-regression-tests.git"
 				ENVIRONMENT_URL="https://github.com/corjasgarcia/adop-cartridge-java-environment-template.git"
 				SERVICE_NAME = "tomcat"
 				APP_URL = "http://52.16.226.150:8888/petclinic"
@@ -34,7 +34,7 @@ pipeline {
 					git url: "https://github.com/corjasgarcia/spring-petclinic.git"
 					}
 				dir('RepoTwo') {
-					git url:  ${TEST_URL}
+					git url:  "${TEST_URL}"
 					}
 				dir('RepoThree') {
 					git url:  ${ENVIRONMENT_URL}
