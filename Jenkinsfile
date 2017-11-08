@@ -7,7 +7,6 @@ pipeline {
   
 	tools { 
 		maven 'apache-maven-3.5.0' 
-		#ant 'ant'
 		}
 	parameters {
             choice(
