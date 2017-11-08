@@ -59,6 +59,8 @@ pipeline {
 				sh "./mvnw clean install -DskipTests"
 				
 				/*
+				
+				
 				Tenemos el war en RepoOne/target..
 				Vamos a crear una imagen de tomcat
 				Siempre sera la misma, luego el contenedor será distinto
