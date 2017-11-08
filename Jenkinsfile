@@ -37,7 +37,7 @@ pipeline {
 					git url:  "${TEST_URL}"
 					}
 				dir('RepoThree') {
-					git url:  ${ENVIRONMENT_URL}
+					git url:  "${ENVIRONMENT_URL}"
 					}
 			
             }
