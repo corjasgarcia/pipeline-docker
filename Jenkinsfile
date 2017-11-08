@@ -8,15 +8,7 @@ pipeline {
 	tools { 
 		maven 'apache-maven-3.5.0' 
 		}
-	properties{
-		
-	parameters {
-            choice(
-                name: 'ENVIRONMENT_TYPE',
-                choices: ['DEV','PROD'],
-                description: "Create Environment for development(named: CI) or production (named: PRODA and PRODB)")
-	}
-	}
+	properties([parameters([choice(choices: ['DEV', 'PROD'], description: '', name: 'ENVIRONMENT')]), pipelineTriggers([])])
 
 	environment {
 				
