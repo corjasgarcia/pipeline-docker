@@ -13,7 +13,7 @@ pipeline {
 	parameters {
             choice(
                 name: 'ENVIRONMENT_TYPE',
-                choices: ['DEV\PROD'],
+                choices: ['DEV','PROD'],
                 description: "Create Environment for development(named: CI) or production (named: PRODA and PRODB)")
 	}
 	}
