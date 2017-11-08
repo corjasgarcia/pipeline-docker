@@ -8,7 +8,7 @@ pipeline {
 	tools { 
 		maven 'apache-maven-3.5.0' 
 		}
-	properties([parameters([choice(choices: ['DEV', 'PROD'], description: '', name: 'ENVIRONMENT')]), pipelineTriggers([])])
+	parameters([choice(choices: ['DEV', 'PROD'], description: '', name: 'ENVIRONMENT')])
 
 	environment {
 				
