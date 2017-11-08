@@ -30,13 +30,13 @@ pipeline {
                 echo 'Cloning repository'
 				
 				dir('RepoOne') {
-					git url: ${PROJECT_URL}
+					git url: $PROJECT_URL
 					}
 				dir('RepoTwo') {
-					git url:  ${TEST_URL}
+					git url:  $TEST_URL
 					}
 				dir('RepoThree') {
-					git url:  ${ENVIRONMENT_URL}
+					git url:  $ENVIRONMENT_URL
 					}
 			
             }
