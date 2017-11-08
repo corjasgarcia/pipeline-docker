@@ -110,7 +110,8 @@ pipeline {
 						#Tenemos la aplicacion ya en la imagen del contenedor
 						#Debemos levantar el contenedor
 					  docker images
-					  docker run -d -it --rm --name ${SERVICE_NAME} -p 8888:8080 mytomcat:last
+					  docker run -d --name ${SERVICE_NAME} -p 8888:8080 mytomcat:last
+					
 					  
 					  
                       COUNT=1
