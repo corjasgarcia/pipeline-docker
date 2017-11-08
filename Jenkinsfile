@@ -9,7 +9,7 @@ pipeline {
 		maven 'apache-maven-3.5.0' 
 		}
 	parameters{
-		choice(choices: ['DEV', 'PROD'], description: '', name: 'ENVIRONMENT'))
+		choice(choices: ['DEV', 'PROD'], description: '', name: 'ENVIRONMENT')
 	}
 
 	environment {
