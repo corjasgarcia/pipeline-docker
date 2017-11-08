@@ -23,6 +23,7 @@ pipeline {
 				JMETER_TESTDIR = "jmeter_dir"
 				IP = "52.16.226.150"
 			}
+		
     stages {
         stage('Clone') {
 			
@@ -30,7 +31,7 @@ pipeline {
                 echo 'Cloning repository'
 				
 				dir('RepoOne') {
-					git url: ${PROJECT_URL}
+					git url: "https://github.com/corjasgarcia/spring-petclinic.git"
 					}
 				dir('RepoTwo') {
 					git url:  ${TEST_URL}
