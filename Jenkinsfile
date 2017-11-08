@@ -36,9 +36,11 @@ pipeline {
 				dir('RepoTwo') {
 					git url:  "${TEST_URL}"
 					}
+					/*
 				dir('RepoThree') {
 					git url:  "${ENVIRONMENT_URL}"
 					}
+					*/
 			
             }
         }
