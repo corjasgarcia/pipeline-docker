@@ -82,7 +82,7 @@ pipeline {
 							#No se levanta por algo de la carpeta que esta creando
 							docker run --name proxy -d -p 80:80 nginx
 							#levantariamos el contenedor tomcat
-							docker run -p 8888:8080 mytomcat:last
+							docker run -d -p 8888:8080 mytomcat:last
 							## Add nginx configuration
 							ls
 							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" $2
