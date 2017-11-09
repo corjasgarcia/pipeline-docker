@@ -22,6 +22,7 @@ pipeline {
 				APP_URL = "http://52.16.226.150:8888/petclinic"
 				JMETER_TESTDIR = "jmeter_dir"
 				IP = "52.16.226.150"
+				
 			}
 		
     stages {
@@ -32,6 +33,7 @@ pipeline {
 				
 				dir('RepoOne') {
 					git url: "${PROJECT_URL}"
+					sh "${BUILD_NUMBER}"
 					}
 				dir('RepoTwo') {
 					git url:  "${TEST_URL}"
@@ -66,6 +68,7 @@ pipeline {
 				}
             }
         }
+		/*
 		stage ('Environment'){
 			
 		steps{
@@ -80,13 +83,18 @@ pipeline {
 							#export SERVICE_NAME="$(echo ${PROJECT_NAME} | tr '/' '_')_${ENVIRONMENT_NAME}"
 							#Creamos el nginx
 							#No se levanta por algo de la carpeta que esta creando
-							docker run --name proxy -d -p 80:80 nginx
+							#docker run --name proxy -d -p 80:80 nginx
 							#levantariamos el contenedor tomcat
-							docker run -d -p 8888:8080 mytomcat:last
+							docker run -d mytomcat:last
 							## Add nginx configuration
 							ls
 							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" $2
 							docker cp $2 proxy:/etc/nginx/conf.d/${SERVICE_NAME}.conf
+							docker exec -it proxy bash
+							rm /etc/nginx/conf.d/default.conf
+							exit
+							docker restart proxy
+							#muestra los contenedores que contengan la palabra proxy: docker ps | grep "proxy"
 						}
 							createDockerContainer "CI" tomcat.conf
 			'''
@@ -94,7 +102,7 @@ pipeline {
 		}
 		}
 
-		
+		*/
  
 		/*
 		stage('UnitTestJob'){
@@ -136,7 +144,7 @@ pipeline {
 					  docker images
 					  #CONTAINER_ID = $(docker run -d --name ${SERVICE_NAME} -p 8888:8080 mytomcat:last)
 					  COUNT=1
-				      while ! curl -q http://52.16.226.150:80/petclinic -o /dev/null
+				      while ! curl -q http://52.16.226.150:8888/petclinic -o /dev/null
                       do
 					  if [ ${COUNT} -gt 10 ]; then
                       echo "Docker build failed even after ${COUNT}. Please investigate."
