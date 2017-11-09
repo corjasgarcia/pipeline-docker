@@ -18,7 +18,7 @@ pipeline {
 				PROJECT_URL="https://github.com/corjasgarcia/spring-petclinic.git"
 				TEST_URL= "https://github.com/corjasgarcia/adop-cartridge-java-regression-tests.git"
 				ENVIRONMENT_URL="https://github.com/corjasgarcia/nginx-configuration.git"
-				SERVICE_NAME = "tomcat"
+				SERVICE_NAME = "tomcat_${BUILD_NUMBER}"
 				APP_URL = "http://52.16.226.150:8888/petclinic"
 				JMETER_TESTDIR = "jmeter_dir"
 				IP = "52.16.226.150"
@@ -63,7 +63,7 @@ pipeline {
 				Vamos a crear una imagen de tomcat
 				Siempre sera la misma, luego el contenedor será distinto
 				*/
-				sh "docker build -t mytomcat:last -f Dockerfile ."
+				sh "docker build -t mytomcat:${BUILD_NUMBER} -f Dockerfile ."
 				
 				}
             }
@@ -85,14 +85,15 @@ pipeline {
 							#No se levanta por algo de la carpeta que esta creando
 							#docker run --name proxy -d -p 80:80 nginx
 							#levantariamos el contenedor tomcat
-							docker run -d mytomcat:last
+							#docker run -d mytomcat:last
+							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" docker-compose.yml
+							docker-compose -p tomcat up -d
 							## Add nginx configuration
 							ls
 							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" $2
-							docker cp $2 proxy:/etc/nginx/conf.d/${SERVICE_NAME}.conf
 							docker exec -it proxy bash
 							rm /etc/nginx/conf.d/default.conf
-							exit
+							docker cp $2 proxy:/etc/nginx/conf.d/${SERVICE_NAME}.conf
 							docker restart proxy
 							#muestra los contenedores que contengan la palabra proxy: docker ps | grep "proxy"
 						}
