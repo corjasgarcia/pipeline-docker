@@ -82,6 +82,7 @@ pipeline {
 							#No se levanta por algo de la carpeta que esta creando
 							docker run --name proxy -d -p 80:80 nginx
 							#levantariamos el contenedor tomcat
+							docker run -p 8888:8080 mytomcat:last
 							## Add nginx configuration
 							ls
 							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" $2
@@ -135,7 +136,7 @@ pipeline {
 					  docker images
 					  #CONTAINER_ID = $(docker run -d --name ${SERVICE_NAME} -p 8888:8080 mytomcat:last)
 					  COUNT=1
-				      while ! curl -q http://52.16.226.150:8888/petclinic -o /dev/null
+				      while ! curl -q http://52.16.226.150:80/petclinic -o /dev/null
                       do
 					  if [ ${COUNT} -gt 10 ]; then
                       echo "Docker build failed even after ${COUNT}. Please investigate."
