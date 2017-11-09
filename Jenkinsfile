@@ -147,7 +147,7 @@ pipeline {
 					  docker images
 					  #CONTAINER_ID = $(docker run -d --name ${SERVICE_NAME} -p 8888:8080 mytomcat:last)
 					  COUNT=1
-				      while ! curl -q http://52.16.226.150:8888/petclinic -o /dev/null
+				      while ! curl -q http://${SERVICE_NAME}:8080/petclinic -o /dev/null
                       do
 					  if [ ${COUNT} -gt 10 ]; then
                       echo "Docker build failed even after ${COUNT}. Please investigate."
@@ -156,7 +156,9 @@ pipeline {
                       echo "Application is not up yet. Retrying ..Attempt (${COUNT})"
                       sleep 5
                       COUNT=$((COUNT+1))
-                      done'''
+                      done
+					  echo "Environment URL (replace PUBLIC_IP with your public ip address where you access jenkins from) : http://${SERVICE_NAME}.PUBLIC_IP.xip.io/petclinic"
+					  '''
 						
 					
 				}
