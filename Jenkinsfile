@@ -39,6 +39,7 @@ pipeline {
 					/*
 				dir('RepoThree') {
 					git url:  "${ENVIRONMENT_URL}"
+					
 					}
 					*/
 			
@@ -75,6 +76,8 @@ pipeline {
 				function createDockerContainer() {
 							echo $1, $2
 							#export ENVIRONMENT_NAME=$1
+							ll
+							ls
 							#export SERVICE_NAME="$(echo ${PROJECT_NAME} | tr '/' '_')_${ENVIRONMENT_NAME}"
 							#Creamos el nginx
 							#No se levanta por algo de la carpeta que esta creando
