@@ -17,7 +17,7 @@ pipeline {
 				
 				PROJECT_URL="https://github.com/corjasgarcia/spring-petclinic.git"
 				TEST_URL= "https://github.com/corjasgarcia/adop-cartridge-java-regression-tests.git"
-				ENVIRONMENT_URL="https://github.com/corjasgarcia/adop-cartridge-java-environment-template.git"
+				ENVIRONMENT_URL="https://github.com/corjasgarcia/nginx-configuration.git"
 				SERVICE_NAME = "tomcat"
 				APP_URL = "http://52.16.226.150:8888/petclinic"
 				JMETER_TESTDIR = "jmeter_dir"
@@ -31,7 +31,7 @@ pipeline {
                 echo 'Cloning repository'
 				
 				dir('RepoOne') {
-					git url: "https://github.com/corjasgarcia/spring-petclinic.git"
+					git url: "${PROJECT_URL}"
 					}
 				dir('RepoTwo') {
 					git url:  "${TEST_URL}"
@@ -44,12 +44,7 @@ pipeline {
 			
             }
         }
-		/*
-		stage ('Environment'){
-		
-		}
-		*/
-        stage('Build') {
+		 stage('Build') {
 			
             steps {
 				dir('RepoOne'){
@@ -70,6 +65,32 @@ pipeline {
 				}
             }
         }
+		stage ('Environment'){
+			
+		steps{
+		
+		dir(RepoThree){
+		sh '''
+			
+				function createDockerContainer() {
+							echo $1, $2
+							#export ENVIRONMENT_NAME=$1
+							#export SERVICE_NAME="$(echo ${PROJECT_NAME} | tr '/' '_')_${ENVIRONMENT_NAME}"
+							#Creamos el nginx
+							#No se levanta por algo de la carpeta que esta creando
+							docker run --name mynginx -d -p 80:80 -v nginx_conf:/etc/nginx/conf.d nginx
+							#levantariamos el contenedor tomcat
+							## Add nginx configuration
+							
+							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" $2
+							docker cp $2 proxy:/etc/nginx/conf.d/${SERVICE_NAME}.conf
+						}
+							createDockerContainer "CI" tomcat.conf
+			'''
+		}
+		}
+		}
+
 		
  
 		/*
@@ -110,11 +131,8 @@ pipeline {
 						#Tenemos la aplicacion ya en la imagen del contenedor
 						#Debemos levantar el contenedor
 					  docker images
-					  docker run -d --name ${SERVICE_NAME} -p 8888:8080 mytomcat:last
-					
-					  
-					  
-                      COUNT=1
+					  #CONTAINER_ID = $(docker run -d --name ${SERVICE_NAME} -p 8888:8080 mytomcat:last)
+					  COUNT=1
 				      while ! curl -q http://52.16.226.150:8888/petclinic -o /dev/null
                       do
 					  if [ ${COUNT} -gt 10 ]; then
