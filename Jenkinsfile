@@ -78,7 +78,7 @@ pipeline {
 							#export SERVICE_NAME="$(echo ${PROJECT_NAME} | tr '/' '_')_${ENVIRONMENT_NAME}"
 							#Creamos el nginx
 							#No se levanta por algo de la carpeta que esta creando
-							docker run --name mynginx -d -p 80:80 -v nginx_conf:/etc/nginx/conf.d nginx
+							docker run --name mynginx -d -p 80:80 nginx
 							#levantariamos el contenedor tomcat
 							## Add nginx configuration
 							ls
