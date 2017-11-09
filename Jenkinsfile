@@ -81,7 +81,7 @@ pipeline {
 							docker run --name mynginx -d -p 80:80 -v nginx_conf:/etc/nginx/conf.d nginx
 							#levantariamos el contenedor tomcat
 							## Add nginx configuration
-							
+							ls
 							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" $2
 							docker cp $2 proxy:/etc/nginx/conf.d/${SERVICE_NAME}.conf
 						}
