@@ -86,7 +86,7 @@ pipeline {
 							#docker run --name proxy -d -p 80:80 nginx
 							#levantariamos el contenedor tomcat
 							#docker run -d mytomcat:last
-							${TOMCAT_VERSION}="mytomcat:${BUILD_NUMBER}"
+							TOMCAT_VERSION="mytomcat:${BUILD_NUMBER}"
 							sed -i "s/###SERVICE_NAME###/${SERVICE_NAME}/" docker-compose.yml
 							sed -i "s/###TOMCAT_VERSION###/${TOMCAT_VERSION}/" docker-compose.yml
 							docker-compose -p tomcat up -d
