@@ -68,7 +68,7 @@ pipeline {
 				}
             }
         }
-		/*
+		
 		stage ('Environment'){
 			
 		steps{
@@ -103,7 +103,7 @@ pipeline {
 		}
 		}
 
-		*/
+		
  
 		/*
 		stage('UnitTestJob'){
