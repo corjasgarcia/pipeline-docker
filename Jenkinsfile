@@ -89,7 +89,7 @@ pipeline {
 							TOMCAT_VERSION="mytomcat:${BUILD_NUMBER}"
 							sed -i "s/###SERVICE_NAME###/${SERVICE_NAME}/" docker-compose.yml
 							sed -i "s/###TOMCAT_VERSION###/${TOMCAT_VERSION}/" docker-compose.yml
-							SERVICE_NAME = ${docker-compose -p tomcat up -d}
+							docker-compose -p ${SERVICE_NAME} up -d
 							## Add nginx configuration
 							ls
 							sed -i "s/###SERVICE_NAME###/${SERVICE_NAME}/" $2
