@@ -86,11 +86,12 @@ pipeline {
 							#docker run --name proxy -d -p 80:80 nginx
 							#levantariamos el contenedor tomcat
 							#docker run -d mytomcat:last
-							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" docker-compose.yml
+							sed -i "s/###SERVICE_NAME###/${SERVICE_NAME}/" docker-compose.yml
+							sed -i "s/###TOMCAT_VERSION###/mytomcat:${BUILD_NUMBER}/" docker-compose.yml
 							docker-compose -p tomcat up -d
 							## Add nginx configuration
 							ls
-							sed -i "s/###TOMCAT_SERVICE_NAME###/${SERVICE_NAME}/" $2
+							sed -i "s/###SERVICE_NAME###/${SERVICE_NAME}/" $2
 							docker exec -it proxy bash
 							rm /etc/nginx/conf.d/default.conf
 							docker cp $2 proxy:/etc/nginx/conf.d/${SERVICE_NAME}.conf
