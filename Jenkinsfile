@@ -87,7 +87,7 @@ pipeline {
 							#levantariamos el contenedor tomcat
 							#docker run -d mytomcat:last
 							sed -i "s/###SERVICE_NAME###/${SERVICE_NAME}/" docker-compose.yml
-							sed -i "s/###TOMCAT_VERSION###/mytomcat:${BUILD_NUMBER}/" docker-compose.yml
+							sed -i "s/###TOMCAT_VERSION###/mytomcat:'${BUILD_NUMBER}'/" docker-compose.yml
 							docker-compose -p tomcat up -d
 							## Add nginx configuration
 							ls
