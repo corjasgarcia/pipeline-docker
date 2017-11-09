@@ -33,7 +33,7 @@ pipeline {
 				
 				dir('RepoOne') {
 					git url: "${PROJECT_URL}"
-					echo ${env.BUILD_NUMBER}
+					sh "${env.BUILD_NUMBER}"
 					}
 				dir('RepoTwo') {
 					git url:  "${TEST_URL}"
