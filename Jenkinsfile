@@ -69,8 +69,8 @@ pipeline {
 			
 		steps{
 		
-		dir(RepoThree){
-		sh '''
+			dir('RepoThree'){
+				sh '''
 			
 				function createDockerContainer() {
 							echo $1, $2
