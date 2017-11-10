@@ -114,18 +114,6 @@ pipeline {
 		}
 	}
 		}
-		stage('SonarQube analysis 2') {
-			steps{
-				script{
-					scannerHome = tool 'SonarQube Scanner 2.8';
-					}
-				// requires SonarQube Scanner 2.8+
-				withSonarQubeEnv('sonarQube5.3') {
-				sh "${scannerHome}/bin/sonar-scanner"
-		}
-			
-    }
-  }
   
 		stage('Deployment'){
 			
