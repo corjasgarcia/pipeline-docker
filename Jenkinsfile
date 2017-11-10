@@ -98,7 +98,7 @@ pipeline {
 		stage('UnitTestJob'){
 			
 			steps{	
-				sh "./mvnw clean test"
+				sh "./RepoOne/mvnw clean test"
 		}
 		}
 		stage('SonarQube analysis 1'){
@@ -106,7 +106,7 @@ pipeline {
 		//Get properties from maven in the pom	
 			steps{
 				withSonarQubeEnv('sonarQube5.3') {
-				sh './mvnw sonar:sonar'
+				sh './mvnw/RepoOne sonar:sonar'
 		}
 		}
 	}
