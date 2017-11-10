@@ -98,18 +98,22 @@ pipeline {
 		stage('UnitTestJob'){
 			
 			steps{	
-				sh "./RepoOne/mvnw clean test"
+				dir ("RepoOne"){
+					sh "./RepoOne/mvnw clean test"
 		}
+			}
 		}
 		stage('SonarQube analysis 1'){
 	
 		//Get properties from maven in the pom	
 			steps{
+				dir ("RepoOne"){
 				withSonarQubeEnv('sonarQube5.3') {
 				sh './mvnw/RepoOne sonar:sonar'
 		}
 		}
 	}
+		}
 		stage('SonarQube analysis 2') {
 			steps{
 				script{
@@ -119,6 +123,7 @@ pipeline {
 				withSonarQubeEnv('sonarQube5.3') {
 				sh "${scannerHome}/bin/sonar-scanner"
 		}
+			
     }
   }
   
