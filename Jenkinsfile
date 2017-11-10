@@ -57,6 +57,7 @@ pipeline {
 				sh "./mvnw clean install -DskipTests"
 				
 				/*Generating war, and building image of the app
+				*/
 				
 				sh "docker build -t mytomcat:${BUILD_NUMBER} -f Dockerfile ."
 				
@@ -241,7 +242,7 @@ pipeline {
 		
 		
   
-*/
+		*/
 
 	}
 }
