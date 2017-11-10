@@ -99,7 +99,7 @@ pipeline {
 			
 			steps{	
 				dir ("RepoOne"){
-					sh "./RepoOne/mvnw clean test"
+					sh "mvnw clean test"
 		}
 			}
 		}
@@ -109,7 +109,7 @@ pipeline {
 			steps{
 				dir ("RepoOne"){
 				withSonarQubeEnv('sonarQube5.3') {
-				sh './mvnw/RepoOne sonar:sonar'
+				sh 'mvnw sonar:sonar'
 		}
 		}
 	}
