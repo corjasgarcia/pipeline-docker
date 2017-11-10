@@ -22,7 +22,7 @@ pipeline {
 				APP_URL = "http://52.16.226.150:8888/petclinic"
 				JMETER_TESTDIR = "jmeter_dir"
 				IP = "52.16.226.150"
-				
+				HOSTIP=`ip -4 addr show docker0 | grep 'inet ' | awk '{print $2}' | awk -F '/' '{print $1}'`
 			}
 		
     stages {
@@ -56,13 +56,8 @@ pipeline {
 			
 				sh "./mvnw clean install -DskipTests"
 				
-				/*
+				/*Generating war, and building image of the app
 				
-				
-				Tenemos el war en RepoOne/target..
-				Vamos a crear una imagen de tomcat
-				Siempre sera la misma, luego el contenedor será distinto
-				*/
 				sh "docker build -t mytomcat:${BUILD_NUMBER} -f Dockerfile ."
 				
 				}
@@ -78,26 +73,17 @@ pipeline {
 			
 				function createDockerContainer() {
 							echo $1, $2
-							#export ENVIRONMENT_NAME=$1
-							ls
-							#export SERVICE_NAME="$(echo ${PROJECT_NAME} | tr '/' '_')_${ENVIRONMENT_NAME}"
-							#Creamos el nginx
-							#No se levanta por algo de la carpeta que esta creando
-							#docker run --name proxy -d -p 80:80 nginx
-							#levantariamos el contenedor tomcat
-							#docker run -d mytomcat:last
+		
 							TOMCAT_VERSION="mytomcat:${BUILD_NUMBER}"
 							sed -i "s/###SERVICE_NAME###/${SERVICE_NAME}/" docker-compose.yml
 							sed -i "s/###TOMCAT_VERSION###/${TOMCAT_VERSION}/" docker-compose.yml
 							docker-compose -p ${SERVICE_NAME} up -d
+							
 							## Add nginx configuration
-							ls
+						
 							sed -i "s/###SERVICE_NAME###/${SERVICE_NAME}/" $2
-							#docker exec -it proxy bash
-							#rm /etc/nginx/conf.d/default.conf
 							docker cp $2 proxy:/etc/nginx/conf.d/${SERVICE_NAME}.conf
 							docker restart proxy
-							#muestra los contenedores que contengan la palabra proxy: docker ps | grep "proxy"
 						}
 							createDockerContainer "CI" tomcat.conf
 			'''
@@ -107,7 +93,7 @@ pipeline {
 
 		
  
-		/*
+		
 		stage('UnitTestJob'){
 			
 			steps{	
@@ -134,18 +120,14 @@ pipeline {
 		}
     }
   }
-  */
-
-		stage('agent Docker: Deployment'){
+  
+		stage('Deployment'){
 			
 			
 			steps{		
 				dir("RepoOne"){
 				sh '''
-						#Tenemos la aplicacion ya en la imagen del contenedor
-						#Debemos levantar el contenedor
-					  docker images
-					  #CONTAINER_ID = $(docker run -d --name ${SERVICE_NAME} -p 8888:8080 mytomcat:last)
+						
 					  COUNT=1
 				      while ! curl -q http://${SERVICE_NAME}:8080/petclinic -o /dev/null
                       do
@@ -157,7 +139,7 @@ pipeline {
                       sleep 5
                       COUNT=$((COUNT+1))
                       done
-					  echo "Environment URL (replace PUBLIC_IP with your public ip address where you access jenkins from) : http://${SERVICE_NAME}.PUBLIC_IP.xip.io/petclinic"
+					  echo "Environment URL (replace PUBLIC_IP with your public ip address where you access jenkins from) : http://${SERVICE_NAME}.${IP}.xip.io/petclinic"
 					  '''
 						
 					
@@ -168,20 +150,21 @@ pipeline {
 		}
 		
 	
-		/*
+		
 		stage('regression Test no ZAP'){
 		
 			
 			steps{
 				
-				sh "mvn -f ./RepoTwo/pom.xml clean -B test -DPETCLINIC_URL=${APP_URL}" 
+				sh "mvn -f ./RepoTwo/pom.xml clean -B test -DPETCLINIC_URL=http://${SERVICE_NAME}.${IP}.xip.io/petclinic" 
 				
 				
 			}
 		}
-		*/
 		
-		/*
+		
+		/* not working for the moment...
+		
 		stage('regression Test with ZAP'){
 		
 			
@@ -224,14 +207,14 @@ pipeline {
 				sh '''
 				
 				echo 'Changing user defined parameters for jmx file'
-				sed -i 's/PETCLINIC_HOST_VALUE/'"52.16.226.150"'/g' ${WORKSPACE}/RepoOne/src/test/jmeter/petclinic_test_plan.jmx
+				sed -i 's/PETCLINIC_HOST_VALUE/'"${SERVICE_NAME}"'/g' ${WORKSPACE}/RepoOne/src/test/jmeter/petclinic_test_plan.jmx
 				sed -i 's/PETCLINIC_PORT_VALUE/8888/g' ${WORKSPACE}/RepoOne/src/test/jmeter/petclinic_test_plan.jmx
 				sed -i 's/CONTEXT_WEB_VALUE/petclinic/g' ${WORKSPACE}/RepoOne/src/test/jmeter/petclinic_test_plan.jmx
 				sed -i 's/HTTPSampler.path"></HTTPSampler.path">petclinic</g' ${WORKSPACE}/RepoOne/src/test/jmeter/petclinic_test_plan.jmx		
 				
 				mvn verify 
 				
-				sed -i "s/###TOKEN_VALID_URL###/http:\\/\\/${IP}:8888/g" ${WORKSPACE}/RepoOne/src/test/gatling/src/test/scala/default/RecordedSimulation.scala 
+				sed -i "s/###TOKEN_VALID_URL###/http:\\/\\/${IP}:8080/g" ${WORKSPACE}/RepoOne/src/test/gatling/src/test/scala/default/RecordedSimulation.scala 
 				sed -i "s/###TOKEN_RESPONSE_TIME###/10000/g" ${WORKSPACE}/RepoOne/src/test/gatling/src/test/scala/default/RecordedSimulation.scala
 				mvn -f src/test/gatling/ gatling:execute
 				 '''
