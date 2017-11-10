@@ -22,7 +22,7 @@ pipeline {
 				APP_URL = "http://52.16.226.150:8888/petclinic"
 				JMETER_TESTDIR = "jmeter_dir"
 				IP = "52.16.226.150"
-				HOSTIP=`ip -4 addr show docker0 | grep 'inet ' | awk '{print $2}' | awk -F '/' '{print $1}'`
+				#HOSTIP=`ip -4 addr show docker0 | grep 'inet ' | awk '{print $2}' | awk -F '/' '{print $1}'`
 			}
 		
     stages {
